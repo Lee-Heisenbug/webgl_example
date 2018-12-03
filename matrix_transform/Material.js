@@ -1,8 +1,8 @@
 (function() {
 
-    function Material() {
+    function Material( color ) {
 
-        this.color = new THREE.Color();
+        this.color = new THREE.Color( color );
     }
 
     Material.prototype = Object.assign( {}, {
@@ -13,7 +13,7 @@
 
         glPrograme: null,
 
-        complieShader: function( gl ) {
+        compileShader: function( gl ) {
             this.glPrograme = initShaders( gl, this.vertexShader, this.segmentShader );
             return this.glPrograme;
         }

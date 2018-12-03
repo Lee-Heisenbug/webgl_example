@@ -44,7 +44,7 @@
 
                 currentParent.updateMatrix();
 
-                this.matrixWorld.preMultiply( currentParent.matrix );
+                this.matrixWorld.premultiply( currentParent.matrix );
 
             };
 

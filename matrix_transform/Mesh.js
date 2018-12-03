@@ -10,10 +10,10 @@
     }
 
     Mesh.prototype = Object.assign( Object.create( Object3D.prototype ), {
-        
+        isMesh: true
     } )
 
     window.Mesh = Mesh;
     
-} )
+} )();
 

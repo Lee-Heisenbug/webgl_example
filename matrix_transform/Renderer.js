@@ -20,7 +20,7 @@
 
             camera.matrixWorldInverse.getInverse( camera.matrixWorld );
 
-            this.renderObjects( scene, camera.matrixWorldInverse.preMultiply( camera.projectionMatirx ) );
+            this.renderObjectTree( scene, camera.matrixWorldInverse.premultiply( camera.projectionMatrix ) );
 
         },
 
@@ -30,7 +30,7 @@
 
                 objectTree.matrixWorld.copy( objectTree.matrix );
 
-                objectTree.matrixWorld.preMultiply( objectTree.parent.matrixWorld );
+                objectTree.matrixWorld.premultiply( objectTree.parent.matrixWorld );
 
             }
 
@@ -40,19 +40,19 @@
                 let u_Color;
                 let u_MVPMatrix;
 
-                matrixMVP = matrixMVP.preMultiply( matrixVP );
+                matrixMVP = matrixMVP.premultiply( matrixVP );
 
                 if( !objectTree.material.glPrograme ){
 
-                    objectTree.material.compilePrograme( this.gl );
+                    objectTree.material.compileShader( this.gl );
 
                 }
 
-                this.gl.usePrograme( objectTree.material.glPrograme )
+                this.gl.useProgram( objectTree.material.glPrograme )
 
                 if( !objectTree.geometry.VAO ){
 
-                    objectTree.geometry.createVAO( gl, glPrograme );
+                    objectTree.geometry.createVAO( this.gl, objectTree.material.glPrograme );
 
                     this.gl.bindVertexArray( this.defaultVAO );
 
@@ -64,15 +64,20 @@
 
                 u_Color = this.gl.getUniformLocation( objectTree.material.glPrograme,'u_Color' );
 
-                this.gl.uniformMatrix4fv( u_Color, false, matrixMVP.elements );
+                this.gl.uniformMatrix4fv( u_MVPMatrix, false, new Float32Array( matrixMVP.elements ) );
 
-                this.gl.uniform3f( u_Color, objectTree.material.color.r,
+                this.gl.uniform4f( u_Color, objectTree.material.color.r,
                     objectTree.material.color.g,
-                    objectTree.material.color.b, );
+                    objectTree.material.color.b, 1.0 );
                 
-                this.gl.drawElements( gl.TRIANGLES, objectTree.geometry.faces.length, gl.UNSIGNED_BYTE, 0 );
+                this.gl.drawElements( this.gl.TRIANGLES, objectTree.geometry.faces.length, this.gl.UNSIGNED_BYTE, 0 );
 
             }
+
+            var self = this;
+            objectTree.children.forEach( child => {
+                self.renderObjectTree( child, matrixVP );
+            } )
         }
 
         
@@ -80,5 +85,4 @@
 
     window.Renderer = Renderer;
 
-} )
-
+} )();

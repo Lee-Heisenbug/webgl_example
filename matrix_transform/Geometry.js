@@ -16,7 +16,7 @@
             this.VAO = gl.createVertexArray();
             gl.bindVertexArray( this.VAO );
 
-            initArrayBuffer( gl, glPrograme, gl.FLOAT, new Float32Array( this.vertices ), 3);
+            initArrayBuffer( gl, glPrograme, 'a_Position', gl.FLOAT, new Float32Array( this.vertices ), 3);
 
             initElementArrayBuffer( gl, new Uint8Array( this.faces ) );
             
