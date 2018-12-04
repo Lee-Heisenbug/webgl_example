@@ -4,9 +4,13 @@
         
         this.domElement = domElement;
 
-        this.gl = domElement.getContext('webgl2');
+        this.gl = domElement.getContext( 'webgl2' );
+
+        this.clearColor = new THREE.Vector4( 0, 0, 0, 1 );
         
         var defaultVAO = this.gl.createVertexArray();
+
+        this.gl.clearColor( this.clearColor.x, this.clearColor.y, this.clearColor.z, this.clearColor.w );
 
         this.gl.bindVertexArray(defaultVAO);
         
@@ -16,7 +20,9 @@
 
         renderScene( scene, camera ) {
 
-            camera.updateMatrixWorld;
+            this.gl.clear( this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT );
+
+            camera.updateMatrixWorld();
 
             camera.matrixWorldInverse.getInverse( camera.matrixWorld );
 
@@ -27,6 +33,8 @@
         renderObjectTree( objectTree, matrixVP ) {
 
             if( objectTree.parent ) {
+
+                objectTree.updateMatrix();
 
                 objectTree.matrixWorld.copy( objectTree.matrix );
 
