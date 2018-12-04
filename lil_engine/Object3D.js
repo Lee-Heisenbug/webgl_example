@@ -9,7 +9,7 @@
     
         this.rotation = new THREE.Euler();
     
-        this.scale = new THREE.Vector3();
+        this.scale = new THREE.Vector3( 1, 1, 1 );
 
         this.children = [];
 
@@ -35,6 +35,8 @@
         updateMatrixWorld: function() {
 
             let currentParent = this;
+
+            this.updateMatrix();
 
             this.matrixWorld.copy( this.matrix );
 
